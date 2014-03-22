@@ -3,7 +3,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.jbpm</groupId>
-  <artifactId>REST_Task</artifactId>
+  <artifactId>rest-tasks</artifactId>
   <version>1.0</version>
   <name>rest-tasks</name>
   <description>This project has examples of how to configure the out of the box REST task to perform all HTTP operations.</description>
