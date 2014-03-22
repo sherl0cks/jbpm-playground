@@ -5,7 +5,7 @@
   <groupId>org.jbpm</groupId>
   <artifactId>REST_Task</artifactId>
   <version>1.0</version>
-  <name>rest-task</name>
+  <name>rest-tasks</name>
   <description>This project has examples of how to configure the out of the box REST task to perform all HTTP operations.</description>
   <repositories>
     <repository>
