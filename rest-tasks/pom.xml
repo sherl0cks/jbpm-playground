@@ -30,6 +30,5 @@
             <enabled>false</enabled>
           </snapshots>
         </repository>
-      </repositories>
   </repositories>
 </project>
