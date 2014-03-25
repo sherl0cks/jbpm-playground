@@ -7,14 +7,12 @@
   <version>1.0</version>
   <name>rest-tasks</name>
   <description>This project has examples of how to configure the out of the box REST task to perform all HTTP operations.</description>
-  <dependencies>
-    <dependency>
-      <groupId>org.arquillian.droidium</groupId>
-      <artifactId>arquillian-droidium-build</artifactId>
-      <version>1.0.0.Alpha4</version>
-    </dependency>
-  </dependencies>
+
   <repositories>
+
+
+
+
     <repository>
       <id>guvnor-m2-repo</id>
       <name>Guvnor M2 Repo</name>
