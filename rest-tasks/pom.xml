@@ -20,15 +20,5 @@
       <name>Guvnor M2 Repo</name>
       <url>http://localhost:8080/business-central/maven2/</url>
     </repository>
-        <repository>
-          <id>jboss-community-repository</id>
-          <url>http://repository.jboss.org/nexus/content/groups/public/</url>
-          <releases>
-            <enabled>true</enabled>
-          </releases>
-          <snapshots>
-            <enabled>false</enabled>
-          </snapshots>
-        </repository>
   </repositories>
 </project>
