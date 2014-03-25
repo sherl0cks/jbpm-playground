@@ -14,20 +14,7 @@
       <version>1.0.0.Alpha4</version>
     </dependency>
   </dependencies>
-
   <repositories>
-
-        <repository>
-          <id>jboss-community-repository</id>
-          <url>http://repository.jboss.org/nexus/content/groups/public/</url>
-          <releases>
-            <enabled>true</enabled>
-          </releases>
-          <snapshots>
-            <enabled>false</enabled>
-          </snapshots>
-        </repository>
-
     <repository>
       <id>guvnor-m2-repo</id>
       <name>Guvnor M2 Repo</name>
