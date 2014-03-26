@@ -5,6 +5,7 @@ import org.apache.commons.lang.WordUtils;
 
 rule "testRule"
 	dialect "mvel"
+	ruleflow-group "test"
 	when
 	then
 		insert( new WordUtils() );
