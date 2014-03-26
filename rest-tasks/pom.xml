@@ -18,11 +18,11 @@
       <artifactId>lucene</artifactId>
       <version>1.4.3</version>
     </dependency>
-<dependency>
-    <groupId>org.jboss.resteasy</groupId>
-    <artifactId>arquillian</artifactId>
-    <version>3.0-beta-2</version>
-</dependency>
+    <dependency>
+      <groupId>org.jboss.resteasy</groupId>
+      <artifactId>arquillian</artifactId>
+      <version>3.0-beta-2</version>
+    </dependency>
   </dependencies>
   <repositories>
     <repository>
