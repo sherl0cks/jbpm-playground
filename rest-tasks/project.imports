@@ -5,9 +5,6 @@
         <type>java.lang.Number</type>
       </import>
       <import>
-        <type>java.lang.BigDecimal</type>
-      </import>
-      <import>
         <type>org.apache.commons.lang.time.DateUtils</type>
       </import>
     </imports>
