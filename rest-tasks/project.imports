@@ -7,6 +7,9 @@
       <import>
         <type>java.lang.BigDecimal</type>
       </import>
+      <import>
+        <type>org.apache.commons.lang.time.DateUtils</type>
+      </import>
     </imports>
   </imports>
   <version>1.0</version>
