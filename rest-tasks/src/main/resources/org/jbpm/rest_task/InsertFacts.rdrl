@@ -1,0 +1,9 @@
+package org.jbpm.rest_task;
+
+import java.lang.Number;
+
+rule "InsertFacts"
+	dialect "mvel"
+	when
+	then
+end
