@@ -1,9 +1,27 @@
 package org.jbpm.rest_task;
 
-import java.lang.Number;
+rule "Hello World"
+	
+	when
+		$s : String()
+	then
+		System.out.println( "Hello World, " + $s);
+end
 
-rule "InsertFacts"
-	dialect "mvel"
+
+rule "Hello Group 1"
+	ruleflow-group "ruleflow1"
+	
 	when
 	then
+		System.out.println( "Hello from ruleflow1" );
+end
+
+
+rule "Hello Group 2"
+	ruleflow-group "ruleflow2"
+
+	when
+	then
+		System.out.println( "Hello from ruleflow2" );
 end

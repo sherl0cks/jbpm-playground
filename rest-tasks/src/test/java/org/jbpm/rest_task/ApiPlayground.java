@@ -27,21 +27,23 @@ import org.kie.api.KieServices;
 import org.kie.api.command.Command;
 import org.kie.api.definition.KiePackage;
 import org.kie.api.definition.rule.Rule;
+import org.kie.api.event.KieRuntimeEventManager;
+import org.kie.api.event.rule.DebugAgendaEventListener;
+import org.kie.api.logger.KieRuntimeLogger;
 import org.kie.api.runtime.ExecutionResults;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.StatelessKieSession;
 import org.kie.internal.command.CommandFactory;
 
 /**
- * Note that the pom.xml has a logback added. BRMS 6 now binds this to slf4j and logs everything, which is super
- * helpful!
+ * Note that the pom.xml has a logback added. BRMS 6 now binds this to slf4j and logs everything, which is super helpful!
  * 
  * @author sherl0ck
  * 
  */
 public class ApiPlayground {
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings( "unchecked" )
 	@Test
 	public void test() {
 
@@ -51,36 +53,43 @@ public class ApiPlayground {
 		Assert.assertNotNull( kContainer );
 
 		// Get the KieBase and print out the rules in it and assert that it's the number we expect (1 in this example)
-		Collection<Rule> rules = new ArrayList<Rule>();
+		Collection< Rule > rules = new ArrayList< Rule >();
 		for ( KiePackage p : kContainer.getKieBase().getKiePackages() ) {
 			rules.addAll( p.getRules() );
 		}
-		Assert.assertEquals( 1, rules.size() );
-
-		System.out.println( "\nRules in the KBase" );
-		for ( Rule r : rules ) {
-			System.out.println( r.getName() );
-		}
-		System.out.println( "End rules in KBase \n" );
+		Assert.assertEquals( 3, rules.size() );
 
 		// Grab a stateless session from the container and work with the batch api like 5.x
 		StatelessKieSession session = kContainer.newStatelessKieSession();
+		
+		Listener listener = new Listener( new String( "test" ) );
+		session.addEventListener( listener );
 
-		List<Command<ExecutionResults>> commands = new ArrayList<Command<ExecutionResults>>();
+		KieRuntimeLogger thread = KieServices.Factory.get().getLoggers().newFileLogger( session, "thread" );
+		KieRuntimeLogger logger = KieServices.Factory.get().getLoggers().newFileLogger( session, "audit" );
+		KieRuntimeLogger console = KieServices.Factory.get().getLoggers().newConsoleLogger( session );
+
+		List< Command< ExecutionResults >> commands = new ArrayList< Command< ExecutionResults >>();
 
 		commands.add( CommandFactory.newInsertElements( Arrays.asList( "Justin", "Jeff", "Jimmy" ) ) );
+		commands.add( CommandFactory.newStartProcess( "defaultPackage.exampleRuleFlow" ) );
 		commands.add( CommandFactory.newFireAllRules() );
 
-		System.out.println( "Execution 1 \n" );
+		// System.out.println( "Execution 1 \n" );
 		session.execute( CommandFactory.newBatchExecution( commands ) );
-		System.out.println( "\nEnd Execution 1 \n" );
+		// System.out.println( "\nEnd Execution 1 \n" );
 
 		Assert.assertNotNull( session );
 
-		// Turns out Stateless Sessions are resuable - we don't need to create new instances like we do in the component
-		System.out.println( "Execution 2 \n" );
-		session.execute( CommandFactory.newBatchExecution( commands ) );
-		System.out.println( "\nEnd Execution 2 \n" );
-	}
+		logger.close();
+		console.close();
+		thread.close();
+		
+		listener.close();
 
+		// Turns out Stateless Sessions are resuable - we don't need to create new instances like we do in the component
+		// System.out.println( "Execution 2 \n" );
+		// session.execute( CommandFactory.newBatchExecution( commands ) );
+		// System.out.println( "\nEnd Execution 2 \n" );
+	}
 }
