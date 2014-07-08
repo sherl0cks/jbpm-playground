@@ -8,6 +8,9 @@
 	<version>1.0</version>
 	<name>rest-tasks</name>
 	<description>This project has examples of how to configure the out of the box REST task to perform all HTTP operations.</description>
+	<properties>
+		<brms.version>6.0.2-redhat-6</brms.version>
+	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -18,19 +21,19 @@
 		<dependency>
 			<groupId>org.kie</groupId>
 			<artifactId>kie-api</artifactId>
-			<version>6.0.1.Final</version>
+			<version>${brms.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.drools</groupId>
 			<artifactId>drools-compiler</artifactId>
-			<version>6.0.1.Final</version>
+			<version>${brms.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.jbpm</groupId>
 			<artifactId>jbpm-bpmn2</artifactId>
-			<version>6.0.1.Final</version>
+			<version>${brms.version}</version>
 		</dependency>
 
 
@@ -47,5 +50,21 @@
 			<name>Guvnor M2 Repo</name>
 			<url>http://localhost:8080/business-central/maven2/</url>
 		</repository>
+
+		<repository>
+			<id>jboss-maven-repository</id>
+			<name>JBoss Maven Repository</name>
+			<url>http://maven.repository.redhat.com/techpreview/all/</url>
+			<layout>default</layout>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+				<updatePolicy>never</updatePolicy>
+			</snapshots>
+		</repository>
+
 	</repositories>
 </project>

@@ -1,4 +1,4 @@
-package org.jbpm.rest_task;
+package example.rules;
 
 rule "Hello World"
 	

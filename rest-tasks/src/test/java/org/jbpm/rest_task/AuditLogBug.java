@@ -36,48 +36,44 @@ import org.kie.api.runtime.StatelessKieSession;
 import org.kie.internal.command.CommandFactory;
 
 /**
- * Note that the pom.xml has a logback added. BRMS 6 now binds this to slf4j and logs everything, which is super helpful!
+ * 
+ * Test cases for cases 01128215
  * 
  * @author sherl0ck
  * 
  */
-public class ApiPlayground {
+public class AuditLogBug {
 
-	@SuppressWarnings( "unchecked" )
+	/**
+	 * This test will create an audit log that JBDS 7.1.1 cannot read (thread and regular). Please
+	 * note it uses rule flow/bpmn2 (line 72). Console logging works as expected.
+	 */
+	@SuppressWarnings("unchecked")
 	@Test
-	public void test() {
+	public void createsBadAuditLog() {
 
-		// Get a KieContainer from the classpath and make sure it ain't null
-		// Note kmodule.xml in META-INF
 		KieContainer kContainer = KieServices.Factory.get().newKieClasspathContainer();
 		Assert.assertNotNull( kContainer );
 
-		// Get the KieBase and print out the rules in it and assert that it's the number we expect (1 in this example)
 		Collection< Rule > rules = new ArrayList< Rule >();
 		for ( KiePackage p : kContainer.getKieBase().getKiePackages() ) {
 			rules.addAll( p.getRules() );
 		}
 		Assert.assertEquals( 3, rules.size() );
 
-		// Grab a stateless session from the container and work with the batch api like 5.x
 		StatelessKieSession session = kContainer.newStatelessKieSession();
-		
-		Listener listener = new Listener( new String( "test" ) );
-		session.addEventListener( listener );
 
-		KieRuntimeLogger thread = KieServices.Factory.get().getLoggers().newFileLogger( session, "thread" );
-		KieRuntimeLogger logger = KieServices.Factory.get().getLoggers().newFileLogger( session, "audit" );
+		KieRuntimeLogger thread = KieServices.Factory.get().getLoggers().newFileLogger( session, "thread_fail" );
+		KieRuntimeLogger logger = KieServices.Factory.get().getLoggers().newFileLogger( session, "audit_fail" );
 		KieRuntimeLogger console = KieServices.Factory.get().getLoggers().newConsoleLogger( session );
 
 		List< Command< ExecutionResults >> commands = new ArrayList< Command< ExecutionResults >>();
 
 		commands.add( CommandFactory.newInsertElements( Arrays.asList( "Justin", "Jeff", "Jimmy" ) ) );
-		commands.add( CommandFactory.newStartProcess( "defaultPackage.exampleRuleFlow" ) );
+		commands.add( CommandFactory.newStartProcess( "defaultPackage.exampleRuleFlow" ) ); // This is the big difference here
 		commands.add( CommandFactory.newFireAllRules() );
 
-		// System.out.println( "Execution 1 \n" );
 		session.execute( CommandFactory.newBatchExecution( commands ) );
-		// System.out.println( "\nEnd Execution 1 \n" );
 
 		Assert.assertNotNull( session );
 
@@ -85,11 +81,42 @@ public class ApiPlayground {
 		console.close();
 		thread.close();
 		
-		listener.close();
+	}
+	
+	/**
+	 * This test will create an audit log that JBDS 7.1.1 can read (thread and file). Please
+	 * note this test does not invoke rule flow/bpmn2 (line 110).
+	 */
+	@SuppressWarnings("unchecked")
+	@Test
+	public void createsGoodAuditLog() {
+		KieContainer kContainer = KieServices.Factory.get().newKieClasspathContainer();
+		Assert.assertNotNull( kContainer );
 
-		// Turns out Stateless Sessions are resuable - we don't need to create new instances like we do in the component
-		// System.out.println( "Execution 2 \n" );
-		// session.execute( CommandFactory.newBatchExecution( commands ) );
-		// System.out.println( "\nEnd Execution 2 \n" );
+		Collection< Rule > rules = new ArrayList< Rule >();
+		for ( KiePackage p : kContainer.getKieBase().getKiePackages() ) {
+			rules.addAll( p.getRules() );
+		}
+		Assert.assertEquals( 3, rules.size() );
+
+		StatelessKieSession session = kContainer.newStatelessKieSession();
+
+		KieRuntimeLogger thread = KieServices.Factory.get().getLoggers().newFileLogger( session, "thread_success" );
+		KieRuntimeLogger logger = KieServices.Factory.get().getLoggers().newFileLogger( session, "audit_success" );
+		KieRuntimeLogger console = KieServices.Factory.get().getLoggers().newConsoleLogger( session );
+
+		List< Command< ExecutionResults >> commands = new ArrayList< Command< ExecutionResults >>();
+
+		commands.add( CommandFactory.newInsertElements( Arrays.asList( "Justin", "Jeff", "Jimmy" ) ) );
+		//commands.add( CommandFactory.newStartProcess( "defaultPackage.exampleRuleFlow" ) ); // This is the big difference here
+		commands.add( CommandFactory.newFireAllRules() );
+
+		session.execute( CommandFactory.newBatchExecution( commands ) );
+
+		Assert.assertNotNull( session );
+
+		logger.close();
+		console.close();
+		thread.close();
 	}
 }

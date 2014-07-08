@@ -17,3 +17,4 @@ purchases/.pom.xml
 *.classpath
 *.settings
 *.project
+*.log
